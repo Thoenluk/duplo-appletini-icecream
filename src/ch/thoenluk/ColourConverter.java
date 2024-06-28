@@ -25,9 +25,9 @@ public class ColourConverter {
             {-0.9689, 1.8758, 0.0415},
             {0.0557, -0.2040, 1.0570}
     };
-    private static final double X10 = 95.799;
+    private static final double X10 = 94.811;
     private static final double Y10 = 100;
-    private static final double Z10 = 90.926;
+    private static final double Z10 = 107.304;
     private static final double CIELAB_VAR_THRESHOLD = 0.008856;
     private static final double CIELAB_VAR_EXPONENT = 1D / 3;
     private static final double CIELAB_VAR_MULTIPLICAND = 7.787;
