@@ -5,15 +5,14 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+
+import static ch.thoenluk.ColourConverter.*;
 
 public class Image {
-    final String path;
-    final BufferedImage image;
 
-    private static float[] rgbToXyz(final byte[] rgb) {
-
-        return null;
-    }
+    private final String path;
+    private final BufferedImage image;
 
     public Image(final String path) throws IOException {
         this.path = path;
@@ -29,10 +28,13 @@ public class Image {
         final byte[] pixels = new byte[width * height * dataElements];
         raster.getDataElements(0, 0, width, height, pixels);
         for (int x = 0; x < width; x++) {
-            for (int y = 0; y < 90; y++) {
-                for (int dataElement = 0; dataElement < dataElements; dataElement++) {
-                    pixels[y * width + x * dataElements + dataElement] = (byte) 0xff;
-                }
+            for (int y = 0; y < height; y++) {
+                final int start = y * width * dataElements + x * dataElements;
+                final byte[] rgb = Arrays.copyOfRange(pixels, start, start + dataElements);
+                final double[] cielab = ColourConverter.rgbToCielab(rgb);
+                cielab[L] *= 2;
+                final byte[] result = ColourConverter.cielabToRgb(cielab);
+                System.arraycopy(result, 0, pixels, start, dataElements);
             }
         }
         raster.setDataElements(0, 0, width, height, pixels);
