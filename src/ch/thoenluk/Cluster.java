@@ -4,9 +4,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Cluster extends Colour {
+    public static final Cluster[] GRAYSCALE = new Cluster[] {
+            new Cluster(0, 0, 0),
+            new Cluster(60, 60, 60),
+            new Cluster(118, 117, 117),
+            new Cluster(158, 155, 156),
+            new Cluster(218, 218, 217),
+            new Cluster(255, 255, 255)
+    };
     private final Set<Colour> colours = new HashSet<>();
 
     public Cluster(byte red, byte green, byte blue) {
+        super(red, green, blue);
+    }
+
+    public Cluster(int red, int green, int blue) {
         super(red, green, blue);
     }
 
@@ -39,5 +51,9 @@ public class Cluster extends Colour {
         final double result = Math.abs(getL() - newL) + Math.abs(getA() - newA) + Math.abs(getB() - newB);
         setCielabValues(newL, newA, newB);
         return result;
+    }
+
+    public double getDistance() {
+        return colours.stream().map(c -> c.getSquaredDistanceFrom(this)).reduce(Double::sum).orElse(0D);
     }
 }

@@ -20,10 +20,19 @@ public class Image {
         pixels = parsePixels();
     }
 
-    public Cluster[] cluster(final int numberOfClusters) {
-        final Cluster[] clusters = getRandomStartingClusters(numberOfClusters);
-        iterateClusters(clusters);
-        return clusters;
+    public Cluster[] cluster(final int numberOfClusters, final int numberOfIterations) {
+        double bestDistance = Double.MAX_VALUE;
+        Cluster[] bestClusters = null;
+        for (int i = 0; i < numberOfIterations; i++) {
+            final Cluster[] clusters = getRandomStartingClusters(numberOfClusters);
+            iterateClusters(clusters);
+            final double distance = Arrays.stream(clusters).map(Cluster::getDistance).reduce(Double::sum).orElseThrow();
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                bestClusters = clusters;
+            }
+        }
+        return bestClusters;
     }
 
     private Cluster[] getRandomStartingClusters(final int numberOfClusters) {
@@ -70,7 +79,7 @@ public class Image {
         }
         raster.setDataElements(0, 0, width, height, pixelData);
         final String[] parts = path.split("\\.");
-        final String outputPath = parts[0] + "_out." + parts[1];
+        final String outputPath = "output/" + parts[0] + "_out." + parts[1];
         final File output = new File(outputPath);
         ImageIO.write(image, parts[1], output);
     }

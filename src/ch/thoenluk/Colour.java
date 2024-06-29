@@ -13,6 +13,10 @@ public class Colour {
         this(new byte[]{red, green, blue});
     }
 
+    public Colour(int red, int green, int blue) {
+        this((byte) red, (byte) green, (byte) blue);
+    }
+
     public Colour(final byte[] rgb) {
         cielab = ColourConverter.rgbToCielab(rgb);
     }
