@@ -5,9 +5,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Image {
 
@@ -20,6 +18,44 @@ public class Image {
         final File input = new File(path);
         image = ImageIO.read(input);
         pixels = parsePixels();
+    }
+
+    public Cluster[] cluster(final int numberOfClusters) {
+        final Cluster[] clusters = getRandomStartingClusters(numberOfClusters);
+        iterateClusters(clusters);
+        return clusters;
+    }
+
+    private Cluster[] getRandomStartingClusters(final int numberOfClusters) {
+        final List<Cluster> result = new LinkedList<>();
+        final Random random = new Random();
+        final Set<Integer> indices = new HashSet<>();
+        for (int i = 0; i < numberOfClusters; i++) {
+            int index;
+            do {
+                index = random.nextInt(pixels.length);
+            } while (indices.contains(index));
+            indices.add(index);
+        }
+        for (final Integer index : indices) {
+            result.add(new Cluster(pixels[index]));
+        }
+        return result.toArray(new Cluster[0]);
+    }
+
+    private void iterateClusters(final Cluster[] clusters) {
+        double distance = 0;
+        double previousDistance;
+        do {
+            previousDistance = distance;
+            for (final Colour pixel : pixels) {
+                pixel.addToNearestCluster(clusters);
+            }
+            distance = 0;
+            for (final Cluster cluster : clusters) {
+                distance += cluster.setToMeanOfElements();
+            }
+        } while (Math.abs(previousDistance - distance) > distance * 0.01);
     }
 
     public void writeToDefaultOutput() throws IOException {
@@ -57,10 +93,9 @@ public class Image {
         return parsedPixels;
     }
 
-    public void mapPixelsToColours(final Colour[] colours) {
-        final Map<Colour, Colour> nearestColours = new HashMap<>();
+    public void mapPixelsToClusters(final Cluster[] colours) {
         for (final Colour pixel : pixels) {
-            final Colour nearestColour = nearestColours.computeIfAbsent(pixel, p -> p.findNearestColour(colours));
+            final Colour nearestColour = pixel.findNearestCluster(colours);
             pixel.setCielabValuesToColour(nearestColour);
         }
     }
