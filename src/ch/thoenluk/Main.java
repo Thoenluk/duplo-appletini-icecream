@@ -32,10 +32,12 @@ public class Main {
         final String fileName = images[input.nextInt()];
         System.out.printf("Selected %s. Which spectrum should be used?%n", fileName);
         System.out.println("0: Grayscale");
-        System.out.println("1: Auto-detect");
+        System.out.println("1: Rainbow");
+        System.out.println("2: Auto-detect");
         final Cluster[] spectrum = switch (input.nextInt()) {
             case 0 -> Cluster.GRAYSCALE;
-            case 1 -> null;
+            case 1 -> Cluster.PRIDE;
+            case 2 -> null;
             default -> throw new IllegalArgumentException("Clown detected. Shutting down.");
         };
         final int numberOfColours;

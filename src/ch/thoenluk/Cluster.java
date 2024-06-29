@@ -4,13 +4,27 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Cluster extends Colour {
-    public static final Cluster[] GRAYSCALE = new Cluster[] {
+    public static final Cluster[] GRAYSCALE = new Cluster[]{
             new Cluster(0, 0, 0),
             new Cluster(60, 60, 60),
             new Cluster(118, 117, 117),
             new Cluster(158, 155, 156),
             new Cluster(218, 218, 217),
             new Cluster(255, 255, 255)
+    };
+    public static final Cluster[] PRIDE = new Cluster[]{
+            new Cluster(255, 0, 0),
+            new Cluster(255, 127, 0),
+            new Cluster(255, 255, 0),
+            new Cluster(127, 255, 0),
+            new Cluster(0, 255, 0),
+            new Cluster(0, 255, 127),
+            new Cluster(0, 255, 255),
+            new Cluster(0, 127, 255),
+            new Cluster(0, 0, 255),
+            new Cluster(127, 0, 255),
+            new Cluster(255, 0, 255),
+            new Cluster(255, 0, 127)
     };
     private final Set<Colour> colours = new HashSet<>();
 

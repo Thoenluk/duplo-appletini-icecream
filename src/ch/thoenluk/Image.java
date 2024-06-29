@@ -73,9 +73,10 @@ public class Image {
         final int height = raster.getHeight();
         final int dataElements = raster.getNumDataElements();
         final byte[] pixelData = new byte[pixels.length * dataElements];
+        Arrays.fill(pixelData, (byte) 255);
 
         for (int i = 0; i < pixels.length; i++) {
-            System.arraycopy(pixels[i].asRgb(), 0, pixelData, i * dataElements, dataElements);
+            System.arraycopy(pixels[i].asRgb(), 0, pixelData, i * dataElements, 3);
         }
         raster.setDataElements(0, 0, width, height, pixelData);
         final String[] parts = path.split("\\.");
