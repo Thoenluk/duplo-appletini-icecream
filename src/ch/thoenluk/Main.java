@@ -16,7 +16,7 @@ public class Main {
                 .orElseGet(() -> image.cluster(runParameters.numberOfColours(), runParameters.numberOfIterations));
         System.out.println("Converged on:");
         Arrays.stream(clusters).forEach(c -> System.out.println(Arrays.toString(c.asRgb())));
-        image.mapPixelsToClusters(clusters);
+        image.mapPixelsToClusters(clusters, runParameters.scalingFactor());
         System.out.println("All done mapping pixels!");
         image.writeToDefaultOutput();
     }
@@ -32,12 +32,14 @@ public class Main {
         final String fileName = images[input.nextInt()];
         System.out.printf("Selected %s. Which spectrum should be used?%n", fileName);
         System.out.println("0: Grayscale");
-        System.out.println("1: Rainbow");
-        System.out.println("2: Auto-detect");
+        System.out.println("1: Grayscale without black");
+        System.out.println("2: Rainbow");
+        System.out.println("3: Auto-detect");
         final Cluster[] spectrum = switch (input.nextInt()) {
             case 0 -> Cluster.GRAYSCALE;
-            case 1 -> Cluster.PRIDE;
-            case 2 -> null;
+            case 1 -> Cluster.GRAYSCALE_NO_BLACK;
+            case 2 -> Cluster.PRIDE;
+            case 3 -> null;
             default -> throw new IllegalArgumentException("Clown detected. Shutting down.");
         };
         final int numberOfColours;
@@ -52,8 +54,10 @@ public class Main {
             numberOfColours = 0;
             numberOfIterations = 0;
         }
-        return new RunParameters(fileName, spectrum, numberOfColours, numberOfIterations);
+        System.out.println("Enter the scaling factor, or any number < 2 to not scale.");
+        final int scalingFactor = Math.max(1, input.nextInt());
+        return new RunParameters(fileName, spectrum, numberOfColours, numberOfIterations, scalingFactor);
     }
 
-    private record RunParameters(String fileName, Cluster[] spectrum, int numberOfColours, int numberOfIterations) {}
+    private record RunParameters(String fileName, Cluster[] spectrum, int numberOfColours, int numberOfIterations, int scalingFactor) {}
 }

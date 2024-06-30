@@ -1,11 +1,12 @@
 package ch.thoenluk;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import static ch.thoenluk.ColourConverter.*;
 
 public class Colour {
+
+
     private final double[] cielab;
     private Cluster cluster = null;
 
@@ -13,8 +14,12 @@ public class Colour {
         this(new byte[]{red, green, blue});
     }
 
-    public Colour(int red, int green, int blue) {
+    public Colour(final int red, final int green, final int blue) {
         this((byte) red, (byte) green, (byte) blue);
+    }
+
+    public Colour(final double l, final double a, final double b) {
+        cielab = new double[]{l, a, b};
     }
 
     public Colour(final byte[] rgb) {

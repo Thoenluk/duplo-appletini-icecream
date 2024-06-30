@@ -12,6 +12,7 @@ public class Image {
     private final String path;
     private final BufferedImage image;
     private final Colour[] pixels;
+    private final Set<Colour> uniqueColours = new HashSet<>();
 
     public Image(final String path) throws IOException {
         this.path = path;
@@ -23,6 +24,8 @@ public class Image {
     public Cluster[] cluster(final int numberOfClusters, final int numberOfIterations) {
         double bestDistance = Double.MAX_VALUE;
         Cluster[] bestClusters = null;
+        uniqueColours.clear();
+        uniqueColours.addAll(Arrays.asList(pixels));
         for (int i = 0; i < numberOfIterations; i++) {
             final Cluster[] clusters = getRandomStartingClusters(numberOfClusters);
             iterateClusters(clusters);
@@ -57,8 +60,8 @@ public class Image {
         double previousDistance;
         do {
             previousDistance = distance;
-            for (final Colour pixel : pixels) {
-                pixel.addToNearestCluster(clusters);
+            for (final Colour uniqueColour : uniqueColours) {
+                uniqueColour.addToNearestCluster(clusters);
             }
             distance = 0;
             for (final Cluster cluster : clusters) {
@@ -103,10 +106,31 @@ public class Image {
         return parsedPixels;
     }
 
-    public void mapPixelsToClusters(final Cluster[] colours) {
+    public void mapPixelsToClusters(final Cluster[] colours, final int scalingFactor) {
+        if (scalingFactor == 1) {
+            mapPixelsDirectly(colours);
+        }
+        else {
+            scalePixels(colours, scalingFactor);
+        }
+    }
+
+    private void mapPixelsDirectly(Cluster[] colours) {
         for (final Colour pixel : pixels) {
             final Colour nearestColour = pixel.findNearestCluster(colours);
             pixel.setCielabValuesToColour(nearestColour);
+        }
+    }
+
+    private void scalePixels(Cluster[] colours, int scalingFactor) {
+        final WritableRaster raster = image.getRaster();
+        final int width = raster.getWidth();
+        final int height = raster.getHeight();
+        for (int y = 0; y < height; y += scalingFactor) {
+            for (int x = 0; x < width; x += scalingFactor) {
+                final ScaledPixel scaledPixel = new ScaledPixel(pixels, width, scalingFactor, x, y);
+                scaledPixel.setPixelsCielabValuesToNearestColourByFirstPastThePost(colours);
+            }
         }
     }
 }

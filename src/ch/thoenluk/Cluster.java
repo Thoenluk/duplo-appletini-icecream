@@ -12,6 +12,13 @@ public class Cluster extends Colour {
             new Cluster(218, 218, 217),
             new Cluster(255, 255, 255)
     };
+    public static final Cluster[] GRAYSCALE_NO_BLACK = new Cluster[]{
+            new Cluster(60, 60, 60),
+            new Cluster(118, 117, 117),
+            new Cluster(158, 155, 156),
+            new Cluster(218, 218, 217),
+            new Cluster(255, 255, 255)
+    };
     public static final Cluster[] PRIDE = new Cluster[]{
             new Cluster(255, 0, 0),
             new Cluster(255, 127, 0),
