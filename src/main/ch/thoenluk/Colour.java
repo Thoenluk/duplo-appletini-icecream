@@ -1,8 +1,8 @@
-package ch.thoenluk;
+package main.ch.thoenluk;
 
 import java.util.Arrays;
 
-import static ch.thoenluk.ColourConverter.*;
+import static main.ch.thoenluk.ColourConverter.*;
 
 public class Colour {
 

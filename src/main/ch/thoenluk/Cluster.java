@@ -1,4 +1,4 @@
-package ch.thoenluk;
+package main.ch.thoenluk;
 
 import java.util.HashSet;
 import java.util.Set;

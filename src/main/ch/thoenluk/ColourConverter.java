@@ -1,4 +1,4 @@
-package ch.thoenluk;
+package main.ch.thoenluk;
 
 public class ColourConverter {
     public static final int R = 0;

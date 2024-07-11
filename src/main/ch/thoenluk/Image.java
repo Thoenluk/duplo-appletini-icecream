@@ -1,4 +1,4 @@
-package ch.thoenluk;
+package main.ch.thoenluk;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -106,29 +106,48 @@ public class Image {
         return parsedPixels;
     }
 
-    public void mapPixelsToClusters(final Cluster[] colours, final int scalingFactor) {
-        if (scalingFactor == 1) {
-            mapPixelsDirectly(colours);
-        }
-        else {
-            scalePixels(colours, scalingFactor);
+    public void mapPixelsToClusters(final Cluster[] colours, final ScalingType scalingType, final int height, final int width, final int diameter) {
+        switch (scalingType) {
+            case NO_SCALING -> mapPixelsDirectly(colours);
+            case SQUARE, RECTANGLE -> scalePixelsRectangular(colours, scalingType, height, width);
+            case LTR_SLOPE, RTL_SLOPE -> scalePixelsSloped(colours, scalingType, height, width, diameter);
         }
     }
 
-    private void mapPixelsDirectly(Cluster[] colours) {
+    private void mapPixelsDirectly(final Cluster[] colours) {
         for (final Colour pixel : pixels) {
             final Colour nearestColour = pixel.findNearestCluster(colours);
             pixel.setCielabValuesToColour(nearestColour);
         }
     }
 
-    private void scalePixels(Cluster[] colours, int scalingFactor) {
+    private void scalePixelsRectangular(final Cluster[] colours, final ScalingType scalingType, final int height, final int width) {
         final WritableRaster raster = image.getRaster();
-        final int width = raster.getWidth();
-        final int height = raster.getHeight();
-        for (int y = 0; y < height; y += scalingFactor) {
-            for (int x = 0; x < width; x += scalingFactor) {
-                final ScaledPixel scaledPixel = new ScaledPixel(pixels, width, scalingFactor, x, y);
+        final int imageWidth = raster.getWidth();
+        final int imageHeight = raster.getHeight();
+        for (int y = 0; y < imageHeight; y += height) {
+            for (int x = 0; x < imageWidth; x += width) {
+                final ScaledPixel scaledPixel = switch (scalingType) {
+                    case SQUARE -> ScaledPixel.createSquare(pixels, imageWidth, height, y, x);
+                    case RECTANGLE -> ScaledPixel.createRectangle(pixels, imageWidth, height, width, y, x);
+                    default -> throw new IllegalStateException("Unexpected value: " + scalingType);
+                };
+                scaledPixel.setPixelsCielabValuesToNearestColourByFirstPastThePost(colours);
+            }
+        }
+    }
+
+    private void scalePixelsSloped(final Cluster[] colours, final ScalingType scalingType, final int height, final int width, final int diameter) {
+        final WritableRaster raster = image.getRaster();
+        final int imageWidth = raster.getWidth();
+        final int imageHeight = raster.getHeight();
+        for (int y = 0; y < imageHeight; y += height) {
+            for (int x = 0; x < imageWidth; x += diameter) {
+                final ScaledPixel scaledPixel = switch (scalingType) {
+                    case LTR_SLOPE -> ScaledPixel.createLtrSlope(pixels, imageWidth, height, width, y, x, diameter);
+                    case RTL_SLOPE -> ScaledPixel.createRtlSlope(pixels, imageWidth, height, width, y, x, diameter);
+                    default -> throw new IllegalStateException("Unexpected value: " + scalingType);
+                };
                 scaledPixel.setPixelsCielabValuesToNearestColourByFirstPastThePost(colours);
             }
         }
