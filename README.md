@@ -58,4 +58,4 @@ To me personally, the wide spectra of colours that AIs use, often with very soft
 
 As such, I developed this tool mainly to take in an AI image and reduce its colour density in a natural way. The aim is to make images look more human-made, where artists often use a very countable number of shades, even when mixing colours.
 
-A reminder: This tool is intended and permitted for non-commercial use by humans only such as to simplify drawing from an AI reference photo. Using it to improve AI-generated images without major manual alteration afterwards is not a permitted use.
+A reminder: This tool is intended and permitted for use by humans only such as to simplify drawing from an AI reference photo. Using it to improve AI-generated images without major manual alteration afterwards is not a permitted use.
