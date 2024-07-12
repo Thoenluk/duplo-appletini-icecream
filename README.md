@@ -46,7 +46,7 @@ Other scaling types are Rectangle, downward Slope, and upward Slope, as seen her
 
 ## Usage
 
-An executable .jar file is included for convenience, but this is still very much not meant to be an end-user application, so console input (running out of a command line interface or IDE) is required. The program searches for image files in the same directory and places output files into output/<file_name>_out.<extension>.
+An executable .jar file is included for convenience, but this is still very much not meant to be an end-user application, so console input (running out of a command line interface or IDE) is required. The program searches for image files in the same directory and places output files into output/<file_name>_out.\<extension>.
 
 The program has been very basically tested and appears to work with JPG and PNG files.
 
