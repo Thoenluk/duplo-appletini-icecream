@@ -83,6 +83,10 @@ public class Image {
         }
         raster.setDataElements(0, 0, width, height, pixelData);
         final String[] parts = path.split("\\.");
+        final File outputFolder = new File("output");
+        if (!outputFolder.exists()) {
+            outputFolder.mkdir();
+        }
         final String outputPath = "output/" + parts[0] + "_out." + parts[1];
         final File output = new File(outputPath);
         ImageIO.write(image, parts[1], output);

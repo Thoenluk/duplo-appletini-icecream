@@ -4,9 +4,11 @@ This tool has two fundamental purposes, intended to be combined: Colour flatteni
 
 It goes without saying that this tool is provided **as-is** with no promise of usefulness. I have done my best to optimise the process, but processing high-resolution images still takes a moment. It is best used for small images such as pixel art, which is its intended use case.
 
+This tool is intended and permitted for use by humans only such as to simplify drawing from an AI reference photo. Using it to improve AI-generated images without major manual alteration afterwards is not a permitted use.
+
 ## Colour flattening
 
-The world is vibrant and even a basic 24 bit RGB colour space has more variation than human eyes could ever perceive or need. Look at this photo of my cat, Marvin.
+The world is vibrant and even a basic 24 bit RGB colour space has more variation than human eyes could ever perceive or need.Look at this photo of my cat, Marvin.
 
 ![A photo of a very dumb boy cat sitting in hay](examples/Marvin_64.jpg)
 
@@ -22,7 +24,7 @@ The colours used in auto-detection mode are determined using a simple [k-means c
 
 The program can also be run with a fixed colour space, in which case the k-means clustering is skipped. Colours are still compared in CIELAB space with a fixed colour space. See grayscale Marvin:
 
-![A grayscale photo of a very dumb boy cat sitting in hay](example/Marvin_grayscale.jpg)
+![A grayscale photo of a very dumb boy cat sitting in hay](examples/Marvin_grayscale.jpg)
 
 (Note: Mapping an otherwise vibrant image to a tiny colour space, in this case five shades from black to white, may have odd-looking effects.)
 
@@ -47,3 +49,13 @@ Other scaling types are Rectangle, downward Slope, and upward Slope, as seen her
 An executable .jar file is included for convenience, but this is still very much not meant to be an end-user application, so console input (running out of a command line interface or IDE) is required. The program searches for image files in the same directory and places output files into output/<file_name>_out.<extension>.
 
 The program has been very basically tested and appears to work with JPG and PNG files.
+
+## De-AI-ifier?
+
+The reason this project was called the De-AI-ifier is a personal peeve with image generation AIs. Since these tools do not perceive as humans do and generate each pixel somewhat individually, they have no restraint when it comes to colour. All too often, every single pixel is a different shade.
+
+To me personally, the wide spectra of colours that AIs use, often with very soft borders and slow gradients, is very noticeable and off-putting. It is also a nuisance to artists using AI to generate reference images, which need to be manually flattened.
+
+As such, I developed this tool mainly to take in an AI image and reduce its colour density in a natural way. The aim is to make images look more human-made, where artists often use a very countable number of shades, even when mixing colours.
+
+A reminder: This tool is intended and permitted for non-commercial use by humans only such as to simplify drawing from an AI reference photo. Using it to improve AI-generated images without major manual alteration afterwards is not a permitted use.
